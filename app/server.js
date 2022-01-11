@@ -15,10 +15,16 @@ todos.get('/', (_, res) => {
     res.json(data);
 });
 todos.put('/', (req, res) => {
-    // TODO
+    const fileData = JSON.parse((0, fs_1.readFileSync)(path.join(process.cwd(), 'data.json'), 'utf8'));
+    fileData.push(req.body.data);
+    (0, fs_1.writeFileSync)(path.join(process.cwd(), 'data.json'), JSON.stringify(fileData), 'utf-8');
+    res.json(fileData);
 });
 todos.delete('/:index', (req, res) => {
-    // TODO
+    const fileData = JSON.parse((0, fs_1.readFileSync)(path.join(process.cwd(), 'data.json'), 'utf8'));
+    fileData.splice(+req.params.index, 1);
+    (0, fs_1.writeFileSync)(path.join(process.cwd(), 'data.json'), JSON.stringify(fileData), 'utf-8');
+    res.json(fileData);
 });
 app.use('/api/todos', todos);
 const httpServer = http.createServer(app);

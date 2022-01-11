@@ -18,6 +18,16 @@ async function loadTodos() {
   return get('/todos').then((res) => res.json());
 }
 
+async function addTodo(req) {
+  return put('/todos', req).then((res) => res.json())
+}
+
+async function deleteTodo(req) {
+  return del(`/todos/${req.index}`, req ).then((res) => res.json())
+}
+
 export default {
-  loadTodos
+  loadTodos,
+  addTodo,
+  deleteTodo,
 }

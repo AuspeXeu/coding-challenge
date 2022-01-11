@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as cors from 'cors';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 const app = express();
 
@@ -18,11 +18,17 @@ todos.get('/', (_, res) => {
 })
 
 todos.put('/', (req, res) => {
-  // TODO
+  const fileData = JSON.parse(readFileSync(path.join(process.cwd(), 'data.json'), 'utf8'))
+  fileData.push(req.body.data)
+  writeFileSync(path.join(process.cwd(), 'data.json'), JSON.stringify(fileData), 'utf-8')
+  res.json(fileData)
 })
 
 todos.delete('/:index', (req, res) => {
-  // TODO
+  const fileData = JSON.parse(readFileSync(path.join(process.cwd(), 'data.json'), 'utf8'))
+  fileData.splice(+req.params.index, 1)
+  writeFileSync(path.join(process.cwd(), 'data.json'), JSON.stringify(fileData), 'utf-8')
+  res.json(fileData)
 })
 
 app.use('/api/todos', todos);
