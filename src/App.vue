@@ -24,7 +24,9 @@
       <Todo
         :todoprop="todo"
         :todoindex="index"
-        @toggledone-index="setDone"/>
+        @toggledone-index="setDone"
+        @delete="setDelete"
+        />
     </div>
   </div>
 </template>
@@ -49,13 +51,26 @@ export default {
     this.todos = todos.map((text) => ({todo: text, done: false}))
   },
   methods: {
-    addTodo() {
-      this.todos.push({ todo: this.newTodo, done: false });
+    async addTodo() {
+      if(this.newTodo === '') {
+        alert('todo should not be empty')
+        return
+      }
+      this.todos.push({ todo: this.newTodo, done: false }),
+      await api.addTodo({
+        data: this.newTodo
+      })
       this.newTodo = '';
     },
     setDone(index) {
       this.todos[index].done = !this.todos[index].done;
     },
+    async setDelete(index) {
+      const res = await api.deleteTodo({
+        index
+      })
+      res && this.todos.splice(index, 1)
+    }
   },
   computed: {
     openTodos() {
