@@ -7,17 +7,26 @@ function get(url) {
 }
 
 function put(url, data) {
-  return fetch(genUrl(url), {credentials: 'same-origin', method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)});
+  return fetch(genUrl(url),
+      {credentials: 'same-origin', method: 'PUT',
+          headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)});
 }
 
-function del(url, data) {
-  return fetch(genUrl(url), {credentials: 'same-origin', method: 'DELETE', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data ?? {})});
+function del(url) {
+  return fetch(genUrl(url),
+      {credentials: 'same-origin', method: 'DELETE'});
 }
 
 async function loadTodos() {
   return get('/todos').then((res) => res.json());
 }
+async function putTodos(data) {
+  return put('/todos',data).then((res) => res.json());
+}
+async function deleteTodos(data) {
+  return del(`/todos/${data}`).then((res) => res.json());
+}
 
 export default {
-  loadTodos
+  loadTodos, putTodos, deleteTodos
 }

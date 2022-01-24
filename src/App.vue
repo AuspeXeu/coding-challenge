@@ -13,18 +13,23 @@
           v-model="newTodo"
           class="py-2 px-2 text-black inline-block w-2/3"
         />
-        <button
-          class="w-1/3 border-black border-2 bg-yellow-500"
-          @click="addTodo">
+        <btn
+                type="w-1/3 border-black border-2 bg-yellow-500"
+                :disabled="addNewTodoCheck"
+                @click="addTodo"
+        >
           Add Todo
-        </button>
+        </btn>
       </div>
     </div>
     <div v-for="(todo, index) in todos" :key="todo.todo">
       <Todo
         :todoprop="todo"
         :todoindex="index"
-        @toggledone-index="setDone"/>
+        @toggledone-index="setDone"
+        @delete-index="deleteTodo"
+
+      />
     </div>
   </div>
 </template>
@@ -32,11 +37,13 @@
 <script>
 import api from './api';
 import Todo from './components/Todo';
+import btn from './components/btn';
 
 export default {
   name: 'App',
   components: {
     Todo,
+    btn,
   },
   data() {
     return {
@@ -51,10 +58,15 @@ export default {
   methods: {
     addTodo() {
       this.todos.push({ todo: this.newTodo, done: false });
+      api.putTodos({ todo: this.newTodo })
       this.newTodo = '';
     },
     setDone(index) {
       this.todos[index].done = !this.todos[index].done;
+    },
+    deleteTodo(index) {
+      this.todos.splice(index, 1);
+      api.deleteTodos(index)
     },
   },
   computed: {
@@ -64,6 +76,9 @@ export default {
       });
       return openTodos;
     },
+    addNewTodoCheck() {
+      return (this.newTodo.trim().length) ? false : true
+    }
   },
 };
 </script>
