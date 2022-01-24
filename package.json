@@ -6,7 +6,8 @@
     "api": "yarn tsc; node app/server.js --watch app",
     "app": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.2.17",

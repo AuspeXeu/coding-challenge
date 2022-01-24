@@ -13,18 +13,25 @@
           v-model="newTodo"
           class="py-2 px-2 text-black inline-block w-2/3"
         />
-        <button
+        <Btn 
+          btnStyle="w-1/3 border-black border-2 bg-yellow-500"
+          @click="addTodo"
+          btnText="Add Todo"
+        />
+        <!-- <button
           class="w-1/3 border-black border-2 bg-yellow-500"
           @click="addTodo">
           Add Todo
-        </button>
+        </button> -->
       </div>
     </div>
     <div v-for="(todo, index) in todos" :key="todo.todo">
       <Todo
         :todoprop="todo"
         :todoindex="index"
-        @toggledone-index="setDone"/>
+        @toggledone-index="setDone"
+        @delete-todo-index="deleteToDo"
+      />
     </div>
   </div>
 </template>
@@ -32,11 +39,13 @@
 <script>
 import api from './api';
 import Todo from './components/Todo';
+import Btn from './components/Btn.vue'
 
 export default {
   name: 'App',
   components: {
     Todo,
+    Btn
   },
   data() {
     return {
@@ -50,12 +59,17 @@ export default {
   },
   methods: {
     addTodo() {
-      this.todos.push({ todo: this.newTodo, done: false });
+      if(this.newTodo.trim()){
+        this.todos.push({ todo: this.newTodo, done: false });
+      }
       this.newTodo = '';
     },
     setDone(index) {
       this.todos[index].done = !this.todos[index].done;
     },
+    deleteToDo(index) {
+      this.todos.splice(index, 1);
+    }
   },
   computed: {
     openTodos() {
